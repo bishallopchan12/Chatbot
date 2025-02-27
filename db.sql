@@ -17,6 +17,21 @@ CREATE TABLE IF NOT EXISTS courses (
     eligibility TEXT NOT NULL,
     career_options TEXT NOT NULL
 );
+CREATE TABLE colleges (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    courses_offered TEXT NOT NULL,
+    UNIQUE KEY unique_name (name)
+);
+CREATE TABLE IF NOT EXISTS blogs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    published_date DATE NOT NULL,
+    UNIQUE KEY unique_title (title)
+);
 
 -- Optional: Add an index on the name column for faster queries
 CREATE INDEX idx_course_name ON courses(name);
@@ -123,3 +138,30 @@ VALUES
     ('Professional and Specialized', 'BArch', 'Bachelor of Architecture focuses on architectural design, planning, and construction.', '5 years', 'NPR 500,000–1,000,000', 'Tribhuvan University, Kathmandu University, Pulchowk Campus', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, IOE entrance exam', '50%+ in NEB +2 Science, entrance exam qualification, drawing skills', 'Architect, Urban Planner, Interior Designer, Project Manager'),
     ('Professional and Specialized', 'Bachelor of Sports Science', 'Bachelor of Sports Science focuses on sports management, physical education, and sports science.', '4 years', 'NPR 300,000–700,000', 'Tribhuvan University, private colleges', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in sports', 'Sports Coach, Physical Educator, Sports Manager, Fitness Trainer'),
     ('Professional and Specialized', 'BAMS', 'Bachelor of Ayurvedic Medicine and Surgery focuses on traditional Ayurvedic medicine and healing.', '5.5 years (including internship)', 'NPR 1,000,000–3,000,000', 'Tribhuvan University, private colleges', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Ayurvedic Doctor, Herbalist, Researcher, Wellness Consultant');
+
+
+
+
+    -- Insert sample data into the blogs table (vlogs related to education in Nepal)
+INSERT INTO blogs (title, author, content, published_date)
+VALUES 
+    ('Top 10 Engineering Colleges in Nepal', 'John Doe', 'Nepal has some of the best engineering colleges in South Asia. Here are the top 10 colleges offering engineering programs.', '2023-10-01'),
+    ('How to Prepare for Medical Entrance Exams', 'Jane Smith', 'Preparing for medical entrance exams like MECEE can be challenging. Here are some tips to help you succeed.', '2023-09-25'),
+    ('Career Opportunities in Computer Science', 'Alice Johnson', 'Computer Science is one of the most sought-after fields. Learn about the career opportunities available in Nepal and abroad.', '2023-09-15'),
+    ('Scholarships for Nepalese Students', 'Bob Brown', 'There are many scholarships available for Nepalese students. Here’s a list of scholarships you can apply for.', '2023-09-10'),
+    ('Study Abroad: A Guide for Nepalese Students', 'Emily Davis', 'Thinking of studying abroad? Here’s a comprehensive guide to help you navigate the process.', '2023-08-30'),
+    ('Best Colleges for Management Studies in Nepal', 'Rajesh Sharma', 'Looking for the best colleges for management studies in Nepal? Here’s a list of top colleges offering BBA, BBS, and MBA programs.', '2023-10-05'),
+    ('How to Crack the IOE Entrance Exam', 'Sita Thapa', 'The IOE entrance exam is highly competitive. Here are some strategies and tips to help you crack the exam.', '2023-10-03'),
+    ('Top 5 Medical Colleges in Nepal', 'Anil Gurung', 'Nepal has some of the best medical colleges in South Asia. Here’s a list of the top 5 medical colleges offering MBBS and other health science programs.', '2023-09-28'),
+    ('Career Opportunities in Agriculture and Forestry', 'Prakash Rai', 'Agriculture and Forestry are emerging fields in Nepal. Learn about the career opportunities and scope in these fields.', '2023-09-20'),
+    ('How to Choose the Right College for You', 'Rina Tamang', 'Choosing the right college is a crucial decision. Here’s a guide to help you make an informed choice.', '2023-09-12'),
+    ('Top Scholarships for Nepalese Students in 2023', 'Sujan Karki', 'Here’s a list of the top scholarships available for Nepalese students in 2023, including government and private scholarships.', '2023-09-05'),
+    ('Study in Australia: A Complete Guide for Nepalese Students', 'Anita Shrestha', 'Australia is a popular destination for Nepalese students. Here’s everything you need to know about studying in Australia.', '2023-08-25'),
+    ('Top 5 IT Colleges in Nepal', 'Ramesh Adhikari', 'Looking for the best IT colleges in Nepal? Here’s a list of the top 5 colleges offering BSc CSIT, BIT, and other IT-related programs.', '2023-08-20'),
+    ('How to Prepare for the Lok Sewa Aayog Exam', 'Bina Basnet', 'The Lok Sewa Aayog exam is highly competitive. Here are some tips and strategies to help you prepare effectively.', '2023-08-15'),
+    ('Career Opportunities in Media and Journalism', 'Kiran Thapa', 'Media and Journalism are exciting fields with a lot of opportunities. Learn about the career options available in Nepal.', '2023-08-10'),
+    ('Top 5 Law Colleges in Nepal', 'Suresh Pandey', 'Here’s a list of the top 5 law colleges in Nepal offering LLB and other law-related programs.', '2023-08-05'),
+    ('How to Write a Winning Scholarship Essay', 'Pooja Gurung', 'Writing a scholarship essay can be challenging. Here are some tips to help you write a winning essay.', '2023-07-30'),
+    ('Study in the USA: A Guide for Nepalese Students', 'Rita Maharjan', 'The USA is a popular destination for Nepalese students. Here’s everything you need to know about studying in the USA.', '2023-07-25'),
+    ('Top 5 Architecture Colleges in Nepal', 'Nabin Shrestha', 'Looking for the best architecture colleges in Nepal? Here’s a list of the top 5 colleges offering BArch and other architecture programs.', '2023-07-20'),
+    ('Career Opportunities in Environmental Science', 'Sabina Thapa', 'Environmental Science is a growing field in Nepal. Learn about the career opportunities and scope in this field.', '2023-07-15');
