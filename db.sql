@@ -1,244 +1,125 @@
+-- Create the database
 CREATE DATABASE IF NOT EXISTS education;
+
+-- Use the database
 USE education;
 
--- Create Courses Table
-
--- Create Courses table
-CREATE TABLE Courses (
-    course_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL,
+-- Create the courses table
+CREATE TABLE IF NOT EXISTS courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
     duration VARCHAR(50) NOT NULL,
-    description TEXT
-) ENGINE=InnoDB;
+    fees VARCHAR(100) NOT NULL,
+    colleges TEXT NOT NULL,
+    admission TEXT NOT NULL,
+    eligibility TEXT NOT NULL,
+    career_options TEXT NOT NULL
+);
 
--- Create Colleges table
-CREATE TABLE Colleges (
-    college_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    location VARCHAR(100) NOT NULL
-) ENGINE=InnoDB;
+-- Optional: Add an index on the name column for faster queries
+CREATE INDEX idx_course_name ON courses(name);
 
--- Create Course_Colleges table (junction table)
-CREATE TABLE Course_Colleges (
-    course_id INT,
-    college_id INT,
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id),
-    FOREIGN KEY (college_id) REFERENCES Colleges(college_id),
-    PRIMARY KEY (course_id, college_id)
-) ENGINE=InnoDB;
-
--- Create Fees table
-CREATE TABLE Fees (
-    course_id INT PRIMARY KEY,
-    fee_range VARCHAR(50) NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
-) ENGINE=InnoDB;
-
--- Create Eligibility table
-CREATE TABLE Eligibility (
-    course_id INT PRIMARY KEY,
-    criteria TEXT NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
-) ENGINE=InnoDB;
-
--- Create Career_Options table
-CREATE TABLE Career_Options (
-    course_id INT PRIMARY KEY,
-    options TEXT NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
-) ENGINE=InnoDB;
-
--- Create Application_Steps table
-CREATE TABLE Application_Steps (
-    course_id INT PRIMARY KEY,
-    steps TEXT NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
-) ENGINE=InnoDB;
-
--- Insert sample data into Courses (expanded set of courses in Nepal)
-INSERT INTO Courses (name, duration, description) VALUES
-    ('BCA', '4 years', 'Bachelor of Computer Applications'),
-    ('MBBS', '5.5 years', 'Bachelor of Medicine, Bachelor of Surgery'),
-    ('Engineering', '4 years', 'Bachelor of Engineering'),
-    ('MBA', '2 years', 'Master of Business Administration'),
-    ('MA', '2 years', 'Master of Arts'),
-    ('BSc CSIT', '4 years', 'Bachelor of Science in Computer Science and IT'),
-    ('BBA', '4 years', 'Bachelor of Business Administration'),
-    ('BHM', '4 years', 'Bachelor of Hotel Management'),
-    ('BEd', '4 years', 'Bachelor of Education'),
-    ('BPH', '4 years', 'Bachelor of Public Health'),
-    ('BDS', '5 years', 'Bachelor of Dental Surgery'),
-    ('BSc Nursing', '4 years', 'Bachelor of Science in Nursing'),
-    ('BALLB', '5 years', 'Bachelor of Arts and Legislative Law'),
-    ('BSc Forestry', '4 years', 'Bachelor of Science in Forestry'),
-    ('Diploma in Pharmacy', '3 years', 'Diploma in Pharmacy'),
-    ('PCL Nursing', '3 years', 'Proficiency Certificate Level in Nursing');
-
--- Insert sample data into Colleges (expanded set of colleges in Nepal)
-INSERT INTO Colleges (name, location) VALUES
-    ('Advance College', 'Kathmandu'),
-    ('IOE Pulchowk', 'Lalitpur'),
-    ('Kathmandu University', 'Kathmandu'),
-    ('IOM', 'Kathmandu'),
-    ('Tribhuvan University', 'Kathmandu'),
-    ('Pokhara University', 'Pokhara'),
-    ('Nepal Medical College', 'Kathmandu'),
-    ('Nepal Law Campus', 'Kathmandu'),
-    ('Kathmandu Model College', 'Kathmandu'),
-    ('Lumbini Buddhist University', 'Lumbini'),
-    ('Birendra Multiple Campus', 'Chitwan'),
-    ('St. Xavier’s College', 'Kathmandu'),
-    ('KIST College', 'Kathmandu'),
-    ('Nepal Engineering College', 'Bhaktapur'),
-    ('Manipal College of Medical Sciences', 'Pokhara');
-
--- Insert sample data into Course_Colleges (linking courses to colleges)
-INSERT INTO Course_Colleges (course_id, college_id) VALUES
-    (1, 1), (1, 5), (1, 9),  -- BCA: Advance College, TU, Kathmandu Model College
-    (2, 4), (2, 7),  -- MBBS: IOM, Nepal Medical College
-    (3, 2), (3, 3), (3, 14),  -- Engineering: IOE Pulchowk, KU, Nepal Engineering College
-    (4, 5), (4, 3),  -- MBA: TU, KU
-    (5, 5), (5, 6), (5, 10),  -- MA: TU, PU, Lumbini Buddhist University
-    (6, 5), (6, 11),  -- BSc CSIT: TU, Birendra Multiple Campus
-    (7, 5), (7, 13),  -- BBA: TU, KIST College
-    (8, 6), (8, 12),  -- BHM: PU, St. Xavier’s College
-    (9, 5), (9, 11),  -- BEd: TU, Birendra Multiple Campus
-    (10, 4), (10, 7),  -- BPH: IOM, Nepal Medical College
-    (11, 7), (11, 15),  -- BDS: Nepal Medical College, Manipal College
-    (12, 7), (12, 5),  -- BSc Nursing: Nepal Medical College, TU
-    (13, 8),  -- BALLB: Nepal Law Campus
-    (14, 5),  -- BSc Forestry: TU
-    (15, 5), (15, 7),  -- Diploma in Pharmacy: TU, Nepal Medical College
-    (16, 5), (16, 7);  -- PCL Nursing: TU, Nepal Medical College
-
--- Insert sample data into Fees
-INSERT INTO Fees (course_id, fee_range) VALUES
-    (1, '300000-600000'), (2, '800000-1500000'), (3, '400000-800000'),
-    (4, '300000-500000'), (5, '150000-300000'), (6, '300000-600000'),
-    (7, '250000-500000'), (8, '200000-400000'), (9, '100000-250000'),
-    (10, '200000-450000'), (11, '600000-1200000'), (12, '300000-600000'),
-    (13, '200000-400000'), (14, '250000-500000'), (15, '150000-300000'),
-    (16, '100000-200000');
-
--- Insert sample data into Eligibility
-INSERT INTO Eligibility (course_id, criteria) VALUES
-    (1, '50% in NEB +2 any stream'), 
-    (2, '50% in NEB +2 with PCB and NEET'),
-    (3, '45% in NEB +2 with PCM'), 
-    (4, 'Bachelor’s degree with 50%'),
-    (5, 'Bachelor’s degree with 45%'), 
-    (6, '50% in NEB +2 with PCM'),
-    (7, '50% in NEB +2 any stream'), 
-    (8, '45% in NEB +2 any stream'),
-    (9, '45% in NEB +2 any stream'), 
-    (10, '50% in NEB +2 with science'),
-    (11, '50% in NEB +2 with PCB'), 
-    (12, '50% in NEB +2 with science'),
-    (13, '45% in NEB +2 any stream'), 
-    (14, '50% in NEB +2 with science'),
-    (15, '45% in NEB +2 with science'), 
-    (16, '40% in NEB +2 with science');
-
--- Insert sample data into Career_Options
-INSERT INTO Career_Options (course_id, options) VALUES
-    (1, 'software developer, IT manager'), 
-    (2, 'doctor, surgeon'),
-    (3, 'civil engineer, software developer'), 
-    (4, 'business manager, consultant'),
-    (5, 'researcher, educator'), 
-    (6, 'data analyst, programmer'),
-    (7, 'business analyst, entrepreneur'), 
-    (8, 'hotel manager, tourism expert'),
-    (9, 'teacher, education consultant'), 
-    (10, 'public health officer, researcher'),
-    (11, 'dentist, oral surgeon'), 
-    (12, 'nurse, healthcare administrator'),
-    (13, 'lawyer, legal advisor'), 
-    (14, 'forester, environmentalist'),
-    (15, 'pharmacist, drug inspector'), 
-    (16, 'nurse, clinical assistant');
-
--- Insert sample data into Application_Steps
-INSERT INTO Application_Steps (course_id, steps) VALUES
-    (1, '1. Pass entrance exam, 2. Submit +2 transcripts, 3. Apply by July'),
-    (2, '1. Clear NEET, 2. Submit PCB scores, 3. Apply by April'),
-    (3, '1. Pass IOE exam, 2. Submit PCM scores, 3. Apply by June'),
-    (4, '1. Submit bachelor’s transcript, 2. Apply by May'),
-    (5, '1. Submit bachelor’s transcript, 2. Apply by May/December'),
-    (6, '1. Pass TU entrance, 2. Submit +2 scores, 3. Apply by August'),
-    (7, '1. Pass entrance, 2. Submit +2 scores, 3. Apply by June'),
-    (8, '1. Apply online, 2. Submit +2 scores, 3. Interview'),
-    (9, '1. Submit +2 scores, 2. Apply by July'),
-    (10, '1. Pass entrance, 2. Submit science scores, 3. Apply by May'),
-    (11, '1. Clear entrance, 2. Submit PCB scores, 3. Apply by April'),
-    (12, '1. Pass entrance, 2. Submit science scores, 3. Apply by June'),
-    (13, '1. Submit +2 scores, 2. Apply by July'),
-    (14, '1. Pass entrance, 2. Submit science scores, 3. Apply by August'),
-    (15, '1. Submit +2 scores, 2. Apply by May'),
-    (16, '1. Submit +2 scores, 2. Apply by June');
+INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Science and Technology', 'BSc CSIT', 'Bachelor of Science in Computer Science and Information Technology focuses on programming, software development, and IT systems. Ideal for tech enthusiasts.', '4 years', 'NPR 300,000–600,000 (varies by college)', 'Tribhuvan University, Kathmandu University, Pokhara University, private colleges like KIST College', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, entrance exam by TU/KU/PU', '50%+ in NEB +2 Science, entrance exam qualification', 'Software Developer, IT Consultant, Data Analyst, Network Engineer'),
+    ('Science and Technology', 'BSc Physics', 'Bachelor of Science in Physics explores theoretical and experimental physics, preparing students for research or industry roles.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Physics, Chemistry, Math)', 'Physicist, Research Scientist, Lecturer, Data Scientist'),
+    ('Science and Technology', 'BSc Chemistry', 'Bachelor of Science in Chemistry focuses on chemical principles, lab work, and applications in industries like pharmaceuticals.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Chemistry, Physics, Math)', 'Chemist, Pharmacist, Quality Control Analyst, Researcher'),
+    ('Science and Technology', 'BSc Mathematics', 'Bachelor of Science in Mathematics focuses on advanced math theories, statistics, and applications in science and technology.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Math, Physics, Chemistry)', 'Mathematician, Statistician, Actuary, Data Scientist'),
+    ('Science and Technology', 'BSc Biology', 'Bachelor of Science in Biology focuses on life sciences, ecology, and microbiology, preparing for health or research careers.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Biology, Chemistry, Physics)', 'Biologist, Environmental Scientist, Researcher, Lecturer'),
+    ('Science and Technology', 'BSc Environmental Science', 'Bachelor of Science in Environmental Science focuses on environmental conservation, sustainability, and climate change.', '4 years', 'NPR 250,000–550,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science', 'Environmental Consultant, Conservationist, Policy Analyst, Researcher'),
+    ('Science and Technology', 'BSc Statistics', 'Bachelor of Science in Statistics focuses on data analysis, probability, and statistical modeling for research and industry.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Math, Statistics)', 'Statistician, Data Analyst, Actuary, Research Analyst'),
+    ('Science and Technology', 'BSc Electronics', 'Bachelor of Science in Electronics focuses on electronic circuits, devices, and systems for engineering applications.', '4 years', 'NPR 250,000–600,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Physics, Math)', 'Electronics Engineer, Hardware Designer, Technician, Researcher'),
+    ('Science and Technology', 'BSc Electronics and Communication', 'Bachelor of Science in Electronics and Communication focuses on communication systems, signal processing, and electronics.', '4 years', 'NPR 250,000–600,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Physics, Math)', 'Communication Engineer, Network Engineer, Signal Analyst, Researcher'),
+    ('Science and Technology', 'BSc Biotechnology', 'Bachelor of Science in Biotechnology focuses on genetic engineering, microbiology, and bio-products for health and industry.', '4 years', 'NPR 300,000–700,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Biology, Chemistry)', 'Biotechnologist, Researcher, Genetic Engineer, Quality Control Specialist'),
+    ('Science and Technology', 'BCA', 'Bachelor of Computer Applications focuses on software development, programming, and IT applications for tech careers.', '4 years', 'NPR 300,000–600,000', 'Tribhuvan University, Pokhara University, private colleges like Prime College', '10+2 with any stream, NEB +2 at least 45%, entrance exam by some colleges', '45%+ in NEB +2, basic computer knowledge preferred', 'Software Developer, Web Developer, System Analyst, IT Support'),
+    ('Science and Technology', 'BIT', 'Bachelor of Information Technology focuses on IT infrastructure, networking, and system management.', '4 years', 'NPR 300,000–600,000', 'Pokhara University, private colleges like NCIT', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in IT systems', 'IT Manager, Network Administrator, System Analyst, Database Administrator'),
+    ('Science and Technology', 'BE Civil Engineering', 'Bachelor of Engineering in Civil Engineering focuses on infrastructure design, construction, and management.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Kathmandu University, Pulchowk Campus', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, IOE entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Civil Engineer, Structural Engineer, Project Manager, Construction Manager'),
+    ('Science and Technology', 'BE Computer Engineering', 'Bachelor of Engineering in Computer Engineering combines computer science and electronics for hardware/software solutions.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Kathmandu University, Pulchowk Campus', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, IOE entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Computer Engineer, Embedded Systems Engineer, Software Developer, Network Engineer'),
+    ('Science and Technology', 'BE Electronics and Communication Engineering', 'Bachelor of Engineering in Electronics and Communication focuses on communication systems and electronic devices.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Kathmandu University, Pulchowk Campus', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, IOE entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Communication Engineer, Signal Processing Engineer, Electronics Designer, Network Engineer'),
+    ('Science and Technology', 'BE Electrical Engineering', 'Bachelor of Engineering in Electrical Engineering focuses on electrical systems, power generation, and control systems.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Kathmandu University, Pulchowk Campus', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, IOE entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Electrical Engineer, Power Systems Engineer, Control Systems Engineer, Project Manager'),
+    ('Science and Technology', 'BE Mechanical Engineering', 'Bachelor of Engineering in Mechanical Engineering focuses on mechanics, thermodynamics, and machine design.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Kathmandu University, Pulchowk Campus', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, IOE entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Mechanical Engineer, Design Engineer, Manufacturing Engineer, Project Manager'),
+    ('Science and Technology', 'BE Chemical Engineering', 'Bachelor of Engineering in Chemical Engineering focuses on chemical processes, materials, and industrial applications.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Chemical Engineer, Process Engineer, Quality Control Specialist, Researcher'),
+    ('Science and Technology', 'BE Aerospace Engineering', 'Bachelor of Engineering in Aerospace Engineering focuses on aircraft and spacecraft design, aerodynamics, and propulsion.', '4 years', 'NPR 500,000–900,000', 'Kathmandu University', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Aerospace Engineer, Avionics Engineer, Systems Engineer, Researcher'),
+    ('Science and Technology', 'BE Agricultural Engineering', 'Bachelor of Engineering in Agricultural Engineering focuses on farm machinery, irrigation, and agricultural technology.', '4 years', 'NPR 300,000–700,000', 'Tribhuvan University, Agriculture and Forestry University', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Agricultural Engineer, Irrigation Specialist, Farm Consultant, Researcher'),
+    ('Science and Technology', 'BTech Food Technology', 'Bachelor of Technology in Food Technology focuses on food processing, preservation, and quality control.', '4 years', 'NPR 300,000–700,000', 'Tribhuvan University, Purbanchal University', '10+2 with Science, NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science (Chemistry, Biology)', 'Food Technologist, Quality Control Manager, Food Safety Expert, Researcher'),
+    ('Science and Technology', 'BE Architecture', 'Bachelor of Engineering in Architecture focuses on architectural design, planning, and construction.', '5 years', 'NPR 500,000–1,000,000', 'Tribhuvan University, Kathmandu University, Pulchowk Campus', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, IOE entrance exam', '50%+ in NEB +2 Science, entrance exam qualification, drawing skills', 'Architect, Urban Planner, Interior Designer, Project Manager'),
+    ('Science and Technology', 'BEIT', 'Bachelor of Engineering in Information Technology focuses on IT systems, software, and network engineering.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Kathmandu University', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'IT Engineer, Network Administrator, Software Developer, Systems Analyst');
 
 
-
-INSERT INTO Courses (name, duration, description)
-VALUES ('BIT', '4 years', 'Bachelor of Information Technology');
-SELECT course_id, name, duration, description FROM Courses;
-SELECT course_id, name, duration, description FROM Courses WHERE name = 'BCA';
-UPDATE Courses 
-SET duration = '5 years', description = 'Updated Bachelor of Engineering'
-WHERE name = 'Engineering';
-DELETE FROM Courses WHERE name = 'BIT';
-INSERT INTO Colleges (name, location)
-VALUES ('Ace Institute of Management', 'Kathmandu');
-SELECT college_id, name, location FROM Colleges;
-SELECT college_id, name, location FROM Colleges WHERE name = 'IOE Pulchowk';
-UPDATE Colleges 
-SET location = 'Kathmandu Valley'
-WHERE name = 'Kathmandu University';
-DELETE FROM Colleges WHERE name = 'Ace Institute of Management';
-INSERT INTO Course_Colleges (course_id, college_id)
-VALUES ((SELECT course_id FROM Courses WHERE name = 'BCA'), 
-        (SELECT college_id FROM Colleges WHERE name = 'Kathmandu University'));
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Management and Business', 'BBA', 'Bachelor of Business Administration focuses on business management, marketing, and entrepreneurship.', '4 years', 'NPR 300,000–700,000', 'Pokhara University, Tribhuvan University, Kathmandu University, private colleges like KCM', '10+2 with any stream, NEB +2 at least 45%, entrance exam by some colleges', '45%+ in NEB +2, interest in business', 'Business Manager, Marketing Manager, Entrepreneur, HR Manager'),
+    ('Management and Business', 'BBS', 'Bachelor of Business Studies focuses on business administration, accounting, and management under Tribhuvan University.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University, affiliated colleges', '10+2 with Management/Commerce, NEB +2 at least 45%', '45%+ in NEB +2 Management/Commerce', 'Accountant, Business Analyst, Manager, Entrepreneur'),
+    ('Management and Business', 'BHM', 'Bachelor of Hotel Management focuses on hospitality, tourism, and hotel operations.', '4 years', 'NPR 400,000–800,000', 'Pokhara University, Purbanchal University, private colleges like NATHM', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in hospitality', 'Hotel Manager, Tourism Officer, Event Manager, Chef'),
+    ('Management and Business', 'BTTM', 'Bachelor of Travel and Tourism Management focuses on travel operations, tourism marketing, and management.', '4 years', 'NPR 300,000–700,000', 'Pokhara University, Purbanchal University', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in tourism', 'Travel Agent, Tour Operator, Tourism Manager, Marketing Specialist'),
+    ('Management and Business', 'BPA', 'Bachelor of Public Administration focuses on public policy, governance, and administration.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 45%', '45%+ in NEB +2', 'Public Administrator, Policy Analyst, Government Officer, NGO Manager');
 
 
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Humanities and Social Sciences', 'BA English', 'Bachelor of Arts in English focuses on literature, language, and communication skills.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University, Kathmandu University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Writer, Editor, Teacher, Journalist'),
+    ('Humanities and Social Sciences', 'BA Nepali', 'Bachelor of Arts in Nepali focuses on Nepali literature, language, and culture.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Writer, Teacher, Translator, Cultural Researcher'),
+    ('Humanities and Social Sciences', 'BA Sociology', 'Bachelor of Arts in Sociology studies social behavior, institutions, and societies.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Sociologist, Social Worker, Researcher, Policy Analyst'),
+    ('Humanities and Social Sciences', 'BA Anthropology', 'Bachelor of Arts in Anthropology studies human cultures, societies, and evolution.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Anthropologist, Researcher, Cultural Consultant, NGO Worker'),
+    ('Humanities and Social Sciences', 'BA Political Science', 'Bachelor of Arts in Political Science focuses on politics, governance, and international relations.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Political Analyst, Diplomat, Civil Servant, Journalist'),
+    ('Humanities and Social Sciences', 'BA History', 'Bachelor of Arts in History studies historical events, cultures, and civilizations.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Historian, Teacher, Researcher, Archivist'),
+    ('Humanities and Social Sciences', 'BA Economics', 'Bachelor of Arts in Economics focuses on economic theories, policies, and analysis.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Economist, Financial Analyst, Policy Maker, Researcher'),
+    ('Humanities and Social Sciences', 'BA Psychology', 'Bachelor of Arts in Psychology studies human behavior, mental processes, and counseling.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Psychologist, Counselor, HR Specialist, Researcher'),
+    ('Humanities and Social Sciences', 'BA Geography', 'Bachelor of Arts in Geography studies physical and human geography, including Nepal’s landscapes.', '3 years', 'NPR 150,000–400,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Geographer, Environmental Consultant, Urban Planner, Teacher'),
+    ('Humanities and Social Sciences', 'BSW', 'Bachelor of Social Work focuses on social welfare, community development, and social justice.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 40%', '40%+ in NEB +2', 'Social Worker, Community Organizer, NGO Worker, Counselor');
 
-SELECT co.name AS course, c.name AS college, c.location 
-FROM Course_Colleges cc
-JOIN Courses co ON cc.course_id = co.course_id
-JOIN Colleges c ON cc.college_id = c.college_id;
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Education', 'BEd English', 'Bachelor of Education in English focuses on teaching English language and literature.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in teaching', 'English Teacher, Lecturer, Education Consultant, Curriculum Developer'),
+    ('Education', 'BEd Nepali', 'Bachelor of Education in Nepali focuses on teaching Nepali language and literature.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in teaching', 'Nepali Teacher, Lecturer, Education Consultant, Curriculum Developer'),
+    ('Education', 'BEd Mathematics', 'Bachelor of Education in Mathematics focuses on teaching math concepts and pedagogy.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in teaching', 'Math Teacher, Lecturer, Education Consultant, Curriculum Developer'),
+    ('Education', 'BEd Science', 'Bachelor of Education in Science focuses on teaching science subjects like physics, chemistry, and biology.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University', '10+2 with Science, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2 Science, interest in teaching', 'Science Teacher, Lecturer, Education Consultant, Curriculum Developer'),
+    ('Education', 'BEd Social Studies', 'Bachelor of Education in Social Studies focuses on teaching history, geography, and civics.', '4 years', 'NPR 200,000–500,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in teaching', 'Social Studies Teacher, Lecturer, Education Consultant, Curriculum Developer'),
+    ('Education', 'BEd ICT', 'Bachelor of Education in Information Communication Technology focuses on teaching IT and computer skills.', '4 years', 'NPR 250,000–600,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, basic IT knowledge preferred', 'ICT Teacher, Lecturer, Education Consultant, IT Trainer');
+
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Law', 'LLB', 'Bachelor of Laws focuses on legal theory, constitutional law, and practice in Nepal.', '5 years (after 10+2) or 3 years (after bachelor’s)', 'NPR 300,000–700,000', 'Tribhuvan University, Kathmandu School of Law, private colleges', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, entrance exam qualification', 'Lawyer, Judge, Legal Advisor, Corporate Counsel'),
+    ('Law', 'BBA LLB', 'Integrated Bachelor of Business Administration and Laws combines business and legal studies.', '5 years', 'NPR 400,000–800,000', 'Kathmandu School of Law, private colleges', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in business and law', 'Corporate Lawyer, Business Consultant, Legal Manager, Entrepreneur'),
+    ('Law', 'BCom LLB', 'Integrated Bachelor of Commerce and Laws combines commerce and legal studies.', '5 years', 'NPR 400,000–800,000', 'Kathmandu School of Law, private colleges', '10+2 with Management/Commerce, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2 Management/Commerce, interest in law', 'Tax Lawyer, Financial Legal Advisor, Corporate Counsel, Auditor'),
+    ('Law', 'BSc LLB', 'Integrated Bachelor of Science and Laws combines science and legal studies.', '5 years', 'NPR 400,000–800,000', 'Kathmandu School of Law, private colleges', '10+2 with Science, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2 Science, interest in law', 'Environmental Lawyer, Patent Attorney, Legal Scientist, Corporate Counsel');
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Health Sciences', 'MBBS', 'Bachelor of Medicine and Bachelor of Surgery is a medical degree for doctors.', '5.5 years (including internship)', 'NPR 2,000,000–5,000,000 (varies by college, higher for private)', 'Tribhuvan University, Kathmandu University, private colleges like KMC, IOM', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, MECEE entrance exam', '50%+ in NEB +2 Science, MECEE qualification', 'Doctor, Surgeon, Medical Researcher, Public Health Specialist'),
+    ('Health Sciences', 'BDS', 'Bachelor of Dental Surgery focuses on dental medicine and oral health.', '5 years (including internship)', 'NPR 1,500,000–4,000,000', 'Tribhuvan University, Kathmandu University, private colleges like KMC', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, MECEE entrance exam', '50%+ in NEB +2 Science, MECEE qualification', 'Dentist, Orthodontist, Dental Surgeon, Public Health Dentist'),
+    ('Health Sciences', 'BPharm', 'Bachelor of Pharmacy focuses on pharmaceutical sciences and drug development.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Pokhara University, private colleges', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Pharmacist, Drug Researcher, Quality Control Analyst, Regulatory Affairs Specialist'),
+    ('Health Sciences', 'BSc Nursing', 'Bachelor of Science in Nursing prepares students for nursing and healthcare roles.', '4 years', 'NPR 400,000–800,000', 'Tribhuvan University, Kathmandu University, private colleges', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Nurse, Nursing Educator, Healthcare Administrator, Public Health Nurse'),
+    ('Health Sciences', 'BPH', 'Bachelor of Public Health focuses on public health, epidemiology, and community health.', '4 years', 'NPR 300,000–700,000', 'Tribhuvan University, Kathmandu University', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in public health', 'Public Health Officer, Epidemiologist, Health Educator, NGO Worker'),
+    ('Health Sciences', 'BPT', 'Bachelor of Physiotherapy focuses on physical therapy and rehabilitation.', '4 years', 'NPR 400,000–800,000', 'Kathmandu University, private colleges', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Physiotherapist, Rehabilitation Specialist, Sports Therapist, Clinic Manager');
+
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Agriculture and Forestry', 'BSc Agriculture', 'Bachelor of Science in Agriculture focuses on crop science, livestock, and agribusiness.', '4 years', 'NPR 300,000–700,000', 'Agriculture and Forestry University, Tribhuvan University', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Agriculturist, Farm Manager, Agribusiness Consultant, Researcher'),
+    ('Agriculture and Forestry', 'BSc Forestry', 'Bachelor of Science in Forestry focuses on forest management, conservation, and environmental science.', '4 years', 'NPR 300,000–700,000', 'Agriculture and Forestry University, Tribhuvan University', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Forester, Conservationist, Environmental Consultant, Researcher');
 
 
-SELECT c.name, c.location 
-FROM Course_Colleges cc
-JOIN Colleges c ON cc.college_id = c.college_id
-WHERE cc.course_id = (SELECT course_id FROM Courses WHERE name = 'BCA');
-
-UPDATE Course_Colleges 
-SET college_id = (SELECT college_id FROM Colleges WHERE name = 'Tribhuvan University')
-WHERE course_id = (SELECT course_id FROM Courses WHERE name = 'BCA') 
-AND college_id = (SELECT college_id FROM Colleges WHERE name = 'Advance College');
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Media and Communication', 'BJMC', 'Bachelor of Journalism and Mass Communication focuses on media, journalism, and public communication.', '4 years', 'NPR 300,000–700,000', 'Tribhuvan University, private colleges', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in media', 'Journalist, Media Producer, PR Specialist, Content Creator'),
+    ('Media and Communication', 'BA Media Studies', 'Bachelor of Arts in Media Studies focuses on media theory, production, and communication.', '4 years', 'NPR 300,000–700,000', 'Kathmandu University, private colleges', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in media', 'Media Analyst, Film Producer, Journalist, PR Specialist');
 
 
-DELETE FROM Course_Colleges 
-WHERE course_id = (SELECT course_id FROM Courses WHERE name = 'BCA') 
-AND college_id = (SELECT college_id FROM Colleges WHERE name = 'Kathmandu University');
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Fine Arts and Design', 'BFA', 'Bachelor of Fine Arts focuses on painting, sculpture, and visual arts.', '4 years', 'NPR 300,000–700,000', 'Tribhuvan University', '10+2 with any stream, NEB +2 at least 45%, entrance exam or portfolio', '45%+ in NEB +2, creative skills', 'Artist, Designer, Art Teacher, Curator'),
+    ('Fine Arts and Design', 'BDes', 'Bachelor of Design focuses on graphic design, fashion design, or interior design.', '4 years', 'NPR 400,000–800,000', 'Kathmandu University, private colleges', '10+2 with any stream, NEB +2 at least 45%, entrance exam or portfolio', '45%+ in NEB +2, creative skills', 'Graphic Designer, Fashion Designer, Interior Designer, UI/UX Designer');
 
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Vocational and Technical', 'BHM', 'Bachelor of Hotel Management focuses on hospitality, tourism, and hotel operations.', '4 years', 'NPR 400,000–800,000', 'Pokhara University, Purbanchal University, private colleges like NATHM', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in hospitality', 'Hotel Manager, Tourism Officer, Event Manager, Chef'),
+    ('Vocational and Technical', 'BTTM', 'Bachelor of Travel and Tourism Management focuses on travel operations, tourism marketing, and management.', '4 years', 'NPR 300,000–700,000', 'Pokhara University, Purbanchal University', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in tourism', 'Travel Agent, Tour Operator, Tourism Manager, Marketing Specialist'),
+    ('Vocational and Technical', 'Diploma in Engineering', 'Diploma in Engineering focuses on technical skills in civil, electrical, or mechanical engineering.', '3 years', 'NPR 200,000–500,000', 'CTEVT-affiliated institutes, private colleges', '10+2 with Science or SLC/SEE, entrance exam', 'Pass in SLC/SEE or 45%+ in NEB +2 Science', 'Technician, Junior Engineer, Supervisor, Maintenance Engineer'),
+    ('Vocational and Technical', 'TSLC Programs', 'Technical School Leaving Certificate programs focus on vocational skills like nursing, engineering, and agriculture.', '1–2 years', 'NPR 100,000–300,000', 'CTEVT institutes, private technical schools', 'SLC/SEE or 10+2, entrance exam or merit-based', 'Pass in SLC/SEE or basic education', 'Technician, Nurse Assistant, Agricultural Worker, Tradesman');
 
-INSERT INTO Fees (course_id, fee_range)
-VALUES ((SELECT course_id FROM Courses WHERE name = 'BHM'), '150000-300000');
-
-SELECT c.name, f.fee_range 
-FROM Fees f
-JOIN Courses c ON f.course_id = c.course_id;
-
-SELECT fee_range FROM Fees 
-WHERE course_id = (SELECT course_id FROM Courses WHERE name = 'BCA');
-
-SELECT fee_range FROM Fees 
-WHERE course_id = (SELECT course_id FROM Courses WHERE name = 'BCA');
-
-UPDATE Fees 
-SET fee_range = '350000-700000'
-WHERE course_id = (SELECT course_id FROM Courses WHERE name = 'BCA');
-
-INSERT INTO Eligibility (course_id, criteria)
-VALUES ((SELECT course_id FROM Courses WHERE name = 'BHM'), '45% in NEB +2 any stream');
+    INSERT INTO courses (category, name, description, duration, fees, colleges, admission, eligibility, career_options) 
+VALUES 
+    ('Professional and Specialized', 'BArch', 'Bachelor of Architecture focuses on architectural design, planning, and construction.', '5 years', 'NPR 500,000–1,000,000', 'Tribhuvan University, Kathmandu University, Pulchowk Campus', '10+2 with Science (Physics, Chemistry, Math), NEB +2 at least 50%, IOE entrance exam', '50%+ in NEB +2 Science, entrance exam qualification, drawing skills', 'Architect, Urban Planner, Interior Designer, Project Manager'),
+    ('Professional and Specialized', 'Bachelor of Sports Science', 'Bachelor of Sports Science focuses on sports management, physical education, and sports science.', '4 years', 'NPR 300,000–700,000', 'Tribhuvan University, private colleges', '10+2 with any stream, NEB +2 at least 45%, entrance exam', '45%+ in NEB +2, interest in sports', 'Sports Coach, Physical Educator, Sports Manager, Fitness Trainer'),
+    ('Professional and Specialized', 'BAMS', 'Bachelor of Ayurvedic Medicine and Surgery focuses on traditional Ayurvedic medicine and healing.', '5.5 years (including internship)', 'NPR 1,000,000–3,000,000', 'Tribhuvan University, private colleges', '10+2 with Science (Physics, Chemistry, Biology), NEB +2 at least 50%, entrance exam', '50%+ in NEB +2 Science, entrance exam qualification', 'Ayurvedic Doctor, Herbalist, Researcher, Wellness Consultant');
